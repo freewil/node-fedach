@@ -1,0 +1,30 @@
+{
+  "name": "fedach",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Parse FedACH Directory File Format",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "mocha": "~1.3.2",
+    "coffee-script": "~1.3.3"
+  },
+  "scripts": {
+    "test": "mocha",
+    "prepublish": "coffee -c index.coffee"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/freewil/node-fedach.git"
+  },
+  "keywords": [
+    "fed",
+    "ach",
+    "aba",
+    "routing"
+  ],
+  "author": "Sean Lavine <sean@eternalrise.com>"
+}
