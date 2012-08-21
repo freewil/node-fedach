@@ -7,7 +7,7 @@ describe 'fedach', ->
       fedach.parse __dirname + '/FedACHdir.txt', (err, results) ->
         assert.ifError err
         assert.ok results
-        assert.equal results.length, 20706
+        assert.equal results.length, 100
         
         a = results[0]
         assert.equal a.routing, '011000015'
