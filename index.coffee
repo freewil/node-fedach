@@ -5,8 +5,6 @@
 # All Fields are available using camel-cased properties
 ###
 
-{readFile} = require 'fs'
-
 regex = ///
   ^(.{9})     # 1 = Routing Number
   (.{1})      # 2 = Office Code
@@ -30,32 +28,31 @@ regex = ///
 
 
 module.exports =
-  parse: (filename, cb) ->
-    readFile filename, 'utf8', (err, data) ->
-      records = []
-      lines = data.split '\r\n'
-      while line = lines.shift()
-        r = regex.exec line
-        if r
-          records.push
-            routing: r[1]
-            office: r[2]
-            frb: r[3]
-            type: r[4]
-            date: r[5]
-            newRouting: r[6]
-            customer: r[7].trim()
-            address: r[8].trim()
-            city: r[9].trim()
-            state: r[10]
-            zip: r[11]
-            zipExt: r[12]
-            zipFull: r[11] + "-" + r[12]
-            phoneArea: r[13]
-            phonePrefix: r[14]
-            phoneSuffix: r[15]
-            phoneFull: "" + r[13] + r[14] + r[15] + ""
-            status: r[16]
-            dataView: r[17]
-            filter: r[18]
-      cb null, records
+  parse: (data, cb) ->
+    records = []
+    lines = data.split '\r\n'
+    while line = lines.shift()
+      r = regex.exec line
+      if r
+        records.push
+          routing: r[1]
+          office: r[2]
+          frb: r[3]
+          type: r[4]
+          date: r[5]
+          newRouting: r[6]
+          customer: r[7].trim()
+          address: r[8].trim()
+          city: r[9].trim()
+          state: r[10]
+          zip: r[11]
+          zipExt: r[12]
+          zipFull: r[11] + "-" + r[12]
+          phoneArea: r[13]
+          phonePrefix: r[14]
+          phoneSuffix: r[15]
+          phoneFull: "" + r[13] + r[14] + r[15] + ""
+          status: r[16]
+          dataView: r[17]
+          filter: r[18]
+    cb null, records
