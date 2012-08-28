@@ -1,8 +1,6 @@
 ###
 # FedACH Directory File Format
 # https://www.fededirectory.frb.org/download.cfm
-
-# All Fields are available using camel-cased properties
 ###
 
 regex = ///
