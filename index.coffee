@@ -1,8 +1,10 @@
+fs = require 'fs'
+https = require 'https'
+
 ###
 # FedACH Directory File Format
 # https://www.fededirectory.frb.org/download.cfm
 ###
-
 regex = ///
   ^(.{9})     # 1 = Routing Number
   (.{1})      # 2 = Office Code
@@ -24,33 +26,57 @@ regex = ///
   (.{5})$     # 18 = Filter
 ///
 
+module.exports.download = (cb) ->
+  opts =
+    host: 'www.fededirectory.frb.org'
+    path: '/FedACHdir.txt'
+    agent: false
+    ca: fs.readFileSync('./frb_ca.pem')
+    rejectUnauthorized: false
+    
+  req = https.request opts, (res) ->
+    if res.statusCode isnt 200
+      return cb new Error 'Bad status code: ' + res.statusCode
+    
+    if req.connection.authorized isnt false or req.connection.authorizationError isnt 'Hostname/IP doesn\'t match certificate\'s altnames'
+      return cb new Error 'Failed verifying server identity'
+    
+    data = ''
+    res.setEncoding 'utf8'
+    res.on 'data', (d) ->
+      data += d
+    res.on 'end', ->
+      cb null, data
+  
+  req.on 'error', (e) ->
+    cb e
+  req.end()
 
-module.exports =
-  parse: (data, cb) ->
-    records = []
-    lines = data.split '\r\n'
-    while line = lines.shift()
-      r = regex.exec line
-      if r
-        records.push
-          routing: r[1]
-          office: r[2]
-          frb: r[3]
-          type: r[4]
-          date: r[5]
-          newRouting: r[6]
-          customer: r[7].trim()
-          address: r[8].trim()
-          city: r[9].trim()
-          state: r[10]
-          zip: r[11]
-          zipExt: r[12]
-          zipFull: r[11] + "-" + r[12]
-          phoneArea: r[13]
-          phonePrefix: r[14]
-          phoneSuffix: r[15]
-          phoneFull: "" + r[13] + r[14] + r[15] + ""
-          status: r[16]
-          dataView: r[17]
-          filter: r[18]
-    cb null, records
+module.exports.parse = (data) ->
+  records = []
+  lines = data.split '\r\n'
+  while line = lines.shift()
+    r = regex.exec line
+    if r
+      records.push
+        routing: r[1]
+        office: r[2]
+        frb: r[3]
+        type: r[4]
+        date: r[5]
+        newRouting: r[6]
+        customer: r[7].trim()
+        address: r[8].trim()
+        city: r[9].trim()
+        state: r[10]
+        zip: r[11]
+        zipExt: r[12]
+        zipFull: r[11] + "-" + r[12]
+        phoneArea: r[13]
+        phonePrefix: r[14]
+        phoneSuffix: r[15]
+        phoneFull: "" + r[13] + r[14] + r[15] + ""
+        status: r[16]
+        dataView: r[17]
+        filter: r[18]
+  return records
