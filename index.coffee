@@ -30,7 +30,7 @@ getCa = do ->
   ca = null
   return (cb) ->
     return cb null, ca if ca
-    fs.readFile './frb_ca.pem', (err, data) ->
+    fs.readFile __dirname + '/frb_ca.pem', (err, data) ->
       return cb err if err
       ca = data
       cb null, ca
