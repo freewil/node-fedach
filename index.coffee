@@ -26,31 +26,42 @@ regex = ///
   (.{5})$     # 18 = Filter
 ///
 
+getCa = do ->
+  ca = null
+  return (cb) ->
+    return cb null, ca if ca
+    fs.readFile './frb_ca.pem', (err, data) ->
+      return cb err if err
+      ca = data
+      cb null, ca
+
 module.exports.download = (cb) ->
-  opts =
-    host: 'www.fededirectory.frb.org'
-    path: '/FedACHdir.txt'
-    agent: false
-    ca: fs.readFileSync('./frb_ca.pem')
-    rejectUnauthorized: false
+  getCa (err, ca) ->
+    return cb err if err
+    opts =
+      host: 'www.fededirectory.frb.org'
+      path: '/FedACHdir.txt'
+      agent: false
+      ca: ca
+      rejectUnauthorized: false
     
-  req = https.request opts, (res) ->
-    if res.statusCode isnt 200
-      return cb new Error 'Bad status code: ' + res.statusCode
+    req = https.request opts, (res) ->
+      if res.statusCode isnt 200
+        return cb new Error 'Bad status code: ' + res.statusCode
     
-    if req.connection.authorized isnt false or req.connection.authorizationError isnt 'Hostname/IP doesn\'t match certificate\'s altnames'
-      return cb new Error 'Failed verifying server identity'
+      if req.connection.authorized isnt false or req.connection.authorizationError isnt 'Hostname/IP doesn\'t match certificate\'s altnames'
+        return cb new Error 'Failed verifying server identity'
     
-    data = ''
-    res.setEncoding 'utf8'
-    res.on 'data', (d) ->
-      data += d
-    res.on 'end', ->
-      cb null, data
+      data = ''
+      res.setEncoding 'utf8'
+      res.on 'data', (d) ->
+        data += d
+      res.on 'end', ->
+        cb null, data
   
-  req.on 'error', (e) ->
-    cb e
-  req.end()
+    req.on 'error', (e) ->
+      cb e
+    req.end()
 
 module.exports.parse = (data) ->
   records = []
