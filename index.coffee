@@ -48,7 +48,9 @@ module.exports.download = (cb) ->
     req = https.request opts, (res) ->
       if res.statusCode isnt 200
         return cb new Error 'Bad status code: ' + res.statusCode
-    
+      
+      # the server certificate uses an email address in the altnames field
+      # so ignore this error    
       if req.connection.authorized isnt false or req.connection.authorizationError isnt 'Hostname/IP doesn\'t match certificate\'s altnames'
         return cb new Error 'Failed verifying server identity'
     
