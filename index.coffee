@@ -51,7 +51,7 @@ module.exports.download = (cb) ->
       
       # the server certificate uses an email address in the altnames field
       # so ignore this error    
-      if req.connection.authorized isnt false or req.connection.authorizationError isnt 'Hostname/IP doesn\'t match certificate\'s altnames'
+      if not req.connection.authorized and req.connection.authorizationError isnt 'Hostname/IP doesn\'t match certificate\'s altnames'
         return cb new Error 'Failed verifying server identity'
     
       data = ''
