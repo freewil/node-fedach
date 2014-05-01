@@ -1,6 +1,6 @@
 {
   "name": "fedach",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Parse FedACH Directory File Format",
   "main": "index.js",
   "directories": {
