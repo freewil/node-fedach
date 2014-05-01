@@ -43,24 +43,20 @@ module.exports.download = (cb) ->
       path: '/FedACHdir.txt'
       agent: false
       ca: ca
-      rejectUnauthorized: false
-    
+      ciphers: 'RC4'
+      rejectUnauthorized: true
+
     req = https.request opts, (res) ->
       if res.statusCode isnt 200
         return cb new Error 'Bad status code: ' + res.statusCode
-      
-      # the server certificate uses an email address in the altnames field
-      # so ignore this error    
-      if not req.connection.authorized and req.connection.authorizationError isnt 'Hostname/IP doesn\'t match certificate\'s altnames'
-        return cb new Error 'Failed verifying server identity'
-    
+
       data = ''
       res.setEncoding 'utf8'
       res.on 'data', (d) ->
         data += d
       res.on 'end', ->
         cb null, data
-  
+
     req.on 'error', (e) ->
       cb e
     req.end()
