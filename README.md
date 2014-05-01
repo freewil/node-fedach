@@ -1,6 +1,4 @@
-# fedach
-
-[![Build Status](https://travis-ci.org/freewil/node-fedach.png)](https://travis-ci.org/freewil/node-fedach)
+# fedach [![Build Status](https://travis-ci.org/freewil/node-fedach.svg)](https://travis-ci.org/freewil/node-fedach)
 
 Parse FedACH Directory File Format for Node.js
 
