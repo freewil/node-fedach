@@ -27,5 +27,10 @@
     "aba",
     "routing"
   ],
-  "author": "Sean Lavine <lavis88@gmail.com>"
+  "author": "Sean Lavine <lavis88@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/freewil/node-fedach/issues"
+  },
+  "homepage": "https://github.com/freewil/node-fedach#readme",
+  "license": "ISC"
 }
