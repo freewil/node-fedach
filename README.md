@@ -1,4 +1,4 @@
-# fedach [![Build Status](https://travis-ci.org/freewil/node-fedach.svg)](https://travis-ci.org/freewil/node-fedach)
+# fedach [![Build Status](https://travis-ci.org/freewil/node-fedach.svg?branch=master)](https://travis-ci.org/freewil/node-fedach)
 
 Parse FedACH Directory File Format for Node.js
 
@@ -11,17 +11,17 @@ npm install fedach
 ## Usage
 
 ```js
-var fedach = require('fedach');
+const fedach = require('fedach')
 
-fedach.download(function(err, data) {
-  if (err) return console.error(err);
-  var results = fedach.parse(data);
+fedach.download((err, data) => {
+  if (err) return console.error(err)
+  const results = fedach.parse(data)
   console.log(results[0]);
-});
+})
 ```
 
 ```js
-{ 
+{
   routing: '011000015',
   office: 'O',
   frb: '011000015',
@@ -41,6 +41,6 @@ fedach.download(function(err, data) {
   phoneFull: '8662345681',
   status: '1',
   dataView: '1',
-  filter: '     ' 
+  filter: '     '
 }
 ```
