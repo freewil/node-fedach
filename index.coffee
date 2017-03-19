@@ -1,5 +1,4 @@
-fs = require 'fs'
-https = require 'https'
+request = require 'request'
 
 ###
 # FedACH Directory File Format
@@ -26,42 +25,12 @@ regex = ///
   (.{5})$     # 18 = Filter
 ///
 
-getCa = do ->
-  ca = null
-  return (cb) ->
-    return cb null, ca if ca
-    fs.readFile __dirname + '/frb_ca.pem', (err, data) ->
-      return cb err if err
-      ca = data
-      cb null, ca
-
-module.exports.download = (cb) ->
-  getCa (err, ca) ->
+exports.download = (cb) ->
+  request url: 'https://www.frbservices.org/EPaymentsDirectory/FedACHdir.txt', (err, res, body) ->
     return cb err if err
-    opts =
-      host: 'www.fededirectory.frb.org'
-      path: '/FedACHdir.txt'
-      agent: false
-      ca: ca
-      ciphers: 'RC4'
-      rejectUnauthorized: true
+    cb null, body
 
-    req = https.request opts, (res) ->
-      if res.statusCode isnt 200
-        return cb new Error 'Bad status code: ' + res.statusCode
-
-      data = ''
-      res.setEncoding 'utf8'
-      res.on 'data', (d) ->
-        data += d
-      res.on 'end', ->
-        cb null, data
-
-    req.on 'error', (e) ->
-      cb e
-    req.end()
-
-module.exports.parse = (data) ->
+exports.parse = (data) ->
   records = []
   lines = data.split '\r\n'
   while line = lines.shift()

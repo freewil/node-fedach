@@ -6,15 +6,16 @@
   "directories": {
     "test": "test"
   },
-  "dependencies": {},
+  "dependencies": {
+    "request": "^2.81.0"
+  },
   "devDependencies": {
     "coffee-script": "~1.7.1",
     "mocha": "~1.18.2"
   },
   "scripts": {
     "test": "mocha",
-    "prepublish": "coffee -c index.coffee",
-    "get-ca": "curl --silent --show-error https://profile.federalreserve.org/cda-cgi/clientcgi?action=caCert | openssl x509 -inform der -out frb_ca.pem"
+    "prepublish": "coffee -c index.coffee"
   },
   "repository": {
     "type": "git",
@@ -26,5 +27,5 @@
     "aba",
     "routing"
   ],
-  "author": "Sean Lavine <sean@eternalrise.com>"
+  "author": "Sean Lavine <lavis88@gmail.com>"
 }

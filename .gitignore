@@ -1,2 +1,2 @@
-node_modules/
-.project
+/node_modules/
+/index.js
